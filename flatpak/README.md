@@ -12,6 +12,8 @@ Important submission notes:
   The binary is not committed into this repository.
 - `--persist=Yandex.Disk` keeps the Flatpak sync folder app-private while
   avoiding full home filesystem access.
+  Inside the sandbox the CLI sees `/home/user/Yandex.Disk`; on the host the
+  same files live under `~/.var/app/app.diskette.Diskette/Yandex.Disk`.
 - The `app.diskette.Diskette` app ID is a neutral default. Replace it if the
   final maintainer uses a different controlled domain or source-hosting ID.
 - Flathub's repo linter also requires hosted screenshots mirrored into the

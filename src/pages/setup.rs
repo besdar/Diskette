@@ -11,11 +11,46 @@ use libadwaita as adw;
 use std::sync::mpsc;
 use std::thread;
 
+#[derive(Clone)]
+pub(crate) struct AuthCodeDisplay {
+    pub(crate) container: gtk::Box,
+    pub(crate) title: gtk::Label,
+    pub(crate) detail: gtk::Label,
+}
+
+pub(crate) fn build_auth_code_display() -> AuthCodeDisplay {
+    let container = gtk::Box::new(gtk::Orientation::Vertical, 6);
+    container.add_css_class("diskette-card");
+    container.add_css_class("diskette-status");
+    container.set_visible(false);
+
+    let title = gtk::Label::new(Some(text("authorization_code_ready")));
+    title.add_css_class("diskette-title");
+    title.add_css_class("diskette-auth-code");
+    title.set_xalign(0.0);
+    title.set_selectable(true);
+
+    let detail = gtk::Label::new(Some(text("authorization_code_detail")));
+    detail.add_css_class("diskette-muted");
+    detail.set_wrap(true);
+    detail.set_xalign(0.0);
+
+    container.append(&title);
+    container.append(&detail);
+
+    AuthCodeDisplay {
+        container,
+        title,
+        detail,
+    }
+}
+
 pub(crate) fn build_setup_page(
     window: &adw::ApplicationWindow,
     sender: &mpsc::Sender<UiEvent>,
     output_buffer: &gtk::TextBuffer,
     controls: &SetupControls,
+    auth_code_display: &AuthCodeDisplay,
 ) -> gtk::Box {
     let page = page_box();
 
@@ -25,6 +60,7 @@ pub(crate) fn build_setup_page(
     auth_hint.set_wrap(true);
     auth_hint.set_xalign(0.0);
     auth_group.append(&auth_hint);
+    auth_group.append(&auth_code_display.container);
     auth_group.append(&field_row(text("auth_file"), &controls.auth_entry));
     auth_group.append(&file_pick_row(
         window,

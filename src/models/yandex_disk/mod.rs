@@ -9,9 +9,11 @@ mod ui_event;
 
 pub(crate) use command_line::{shell_quote, yandex_binary};
 pub(crate) use command_options::CommandOptions;
-pub(crate) use command_output::DiskOutput;
+pub(crate) use command_output::{DiskOutput, StorageStatus};
 pub(crate) use command_progress::DiskProgress;
 pub(crate) use command_request::DiskRequest;
 pub(crate) use setup::{SetupConfig, SetupSave};
-pub(crate) use setup_storage::{config_file, is_flatpak};
+pub(crate) use setup_storage::{
+    config_file, flatpak_persisted_sync_dir, is_flatpak, sync_dir_open_path,
+};
 pub(crate) use ui_event::UiEvent;

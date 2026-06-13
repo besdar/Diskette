@@ -5,6 +5,11 @@ advanced_setup	Дополнительная настройка
 advanced_setup_hint	Прокси и параметры демона доступны для пользовательских настроек CLI.
 auth_file	Файл авторизации
 authentication_failed	Авторизация не удалась
+authorization_code_detail	Код действует 300 секунд. Убедитесь, что в браузере открыт аккаунт, который нужно подключить.
+authorization_code_enter	Введите код:
+authorization_code_page	Откройте:
+authorization_code_ready	Код авторизации:
+authorization_waiting	Ожидание авторизации
 authentication_setup_hint	Diskette сохранит конфигурацию CLI перед открытием авторизации Яндекса в браузере.
 auto	Авто
 autostart_disabled	Автозапуск отключен.
@@ -43,7 +48,8 @@ failed	ошибка
 failed_to_open_authentication_page	Не удалось открыть страницу авторизации:
 failed_to_open_sync_folder	Не удалось открыть папку синхронизации:
 file_or_folder_path	Путь к файлу или папке
-flatpak_sync_folder_locked	Папка Yandex.Disk управляется песочницей Flatpak и не меняется здесь.
+flatpak_sync_folder_locked	Папка Yandex.Disk управляется песочницей Flatpak и на хосте находится в ~/.var/app/app.diskette.Diskette/Yandex.Disk.
+flatpak_sync_folder_location	Расположение папки Flatpak:
 force_sync	Синхронизировать
 foreground_daemon_launched_with_pid	Демон в переднем плане запущен с PID
 get_started	Начать
@@ -67,6 +73,7 @@ open_sync_folder	Открыть папку синхронизации
 open_auth_page	Открыть авторизацию
 open_yandex_disk_cli_documentation	Открыть документацию CLI Яндекс Диска
 opening_authentication_page	Открывается страница авторизации:
+opening_sync_folder	Открывается папка синхронизации:
 overwrite_local_conflicts	Перезаписывать локальные конфликты
 overview	Обзор
 path	Путь
@@ -105,7 +112,12 @@ stderr_label	stderr:
 stdout_label	stdout:
 stop	Остановить
 storage	Хранилище
+storage_available	Доступно:
+storage_max_file_size	Максимальный размер файла:
 storage_status_hint	Квота Яндекс Диска появится здесь, когда CLI сообщит ее; полный вывод команд остается ниже.
+storage_sync_folder	Папка синхронизации:
+storage_trash_size	Размер корзины:
+storage_used	Использовано:
 storage_waiting_for_status	Выполните Состояние, чтобы проверить хранилище
 success	успех
 sync_directory_hint	Используйте папку ~/Yandex.Disk по умолчанию или выберите другую локальную папку для CLI.

@@ -1,8 +1,11 @@
 use crate::components::append_output;
 use crate::components::yandex_disk::submit_request;
 use crate::i18n::text;
-use crate::models::yandex_disk::{DiskOutput, DiskRequest, SetupSave, UiEvent};
-use crate::utils::open_uri_result;
+use crate::models::yandex_disk::{
+    DiskOutput, DiskRequest, SetupSave, StorageStatus, UiEvent, flatpak_persisted_sync_dir,
+    is_flatpak,
+};
+use crate::utils::{display_path, open_uri_result};
 use gtk::glib;
 use gtk::prelude::*;
 use gtk4 as gtk;
@@ -15,6 +18,12 @@ pub(crate) struct EventPumpUi {
     pub(crate) status_detail: gtk::Label,
     pub(crate) header_status_indicator: gtk::Box,
     pub(crate) header_status_label: gtk::Label,
+    pub(crate) auth_code_container: gtk::Box,
+    pub(crate) auth_code_title: gtk::Label,
+    pub(crate) auth_code_detail: gtk::Label,
+    pub(crate) storage_title: gtk::Label,
+    pub(crate) storage_detail: gtk::Label,
+    pub(crate) storage_bar: gtk::ProgressBar,
     pub(crate) activity_title: gtk::Label,
     pub(crate) activity_detail: gtk::Label,
     pub(crate) publish_link_entry: gtk::Entry,
@@ -33,6 +42,9 @@ pub(crate) fn attach_event_pump(
             match event {
                 UiEvent::CommandProgress(progress) => {
                     append_output(&ui.output_buffer, &progress.text);
+                    if let Some(code) = progress.auth_code.as_deref() {
+                        show_auth_code(&ui, code, progress.auth_url.as_deref());
+                    }
                     if let Some(uri) = progress.auth_url {
                         match open_uri_result(&uri) {
                             Ok(()) => append_output(
@@ -51,6 +63,9 @@ pub(crate) fn attach_event_pump(
                 }
                 UiEvent::CommandFinished(output) => {
                     let completed_token = output.label == "token" && output.success;
+                    if output.label == "token" {
+                        ui.auth_code_container.set_visible(false);
+                    }
                     append_output(&ui.output_buffer, &output.format_for_log());
                     update_status(
                         &ui.status_title,
@@ -60,6 +75,12 @@ pub(crate) fn attach_event_pump(
                         &output,
                     );
                     update_activity(&ui.activity_title, &ui.activity_detail, &output);
+                    update_storage(
+                        &ui.storage_title,
+                        &ui.storage_detail,
+                        &ui.storage_bar,
+                        &output,
+                    );
                     update_publish_link(&ui.publish_link_entry, &output);
                     if completed_token {
                         ui.main_navigation.set_visible(true);
@@ -193,9 +214,104 @@ fn update_status(
     }
 }
 
-fn update_activity(activity_title: &gtk::Label, activity_detail: &gtk::Label, output: &DiskOutput) {
+fn update_activity(
+    activity_title: &gtk::Label,
+    activity_detail: &gtk::Label,
+    output: &DiskOutput,
+) {
     activity_title.set_text(&format!("{} {}", text("last_action"), output.label));
     activity_detail.set_text(&output.summary());
+}
+
+fn show_auth_code(
+    ui: &EventPumpUi,
+    code: &str,
+    auth_url: Option<&str>,
+) {
+    let auth_url = auth_url.unwrap_or("https://ya.ru/device");
+    let title_text = format!("{} {code}", text("authorization_code_ready"));
+    let detail_text = format!(
+        "{} {auth_url}\n{} {code}\n{}",
+        text("authorization_code_page"),
+        text("authorization_code_enter"),
+        text("authorization_code_detail")
+    );
+
+    ui.auth_code_container.set_visible(true);
+    ui.auth_code_title.set_text(&title_text);
+    ui.auth_code_detail.set_text(&detail_text);
+    ui.status_title.set_text(text("authorization_waiting"));
+    ui.status_detail.set_text(&detail_text);
+    set_visual_status(
+        &ui.header_status_indicator,
+        &ui.header_status_label,
+        text("authorization_waiting"),
+        "diskette-status-warning",
+    );
+}
+
+fn update_storage(
+    storage_title: &gtk::Label,
+    storage_detail: &gtk::Label,
+    storage_bar: &gtk::ProgressBar,
+    output: &DiskOutput,
+) {
+    if output.label != "status" {
+        return;
+    }
+
+    if let Some(storage) = output.storage_status() {
+        storage_title.set_text(&format!("{} {}", text("storage_available"), storage.available));
+        storage_detail.set_text(&format_storage_detail(&storage));
+        storage_bar.set_fraction(storage.used_fraction().unwrap_or_default());
+        storage_bar.set_text(Some(&format!(
+            "{} {} / {}",
+            text("storage_used"),
+            storage.used,
+            storage.total
+        )));
+        return;
+    }
+
+    storage_title.set_text(text("storage_waiting_for_status"));
+    storage_detail.set_text(&output.summary());
+    storage_bar.set_fraction(0.0);
+    storage_bar.set_text(Some(text("not_available_yet")));
+}
+
+fn format_storage_detail(storage: &StorageStatus) -> String {
+    let mut parts = vec![format!(
+        "{} {} / {}",
+        text("storage_used"),
+        storage.used,
+        storage.total
+    )];
+
+    if let Some(max_file_size) = storage.max_file_size.as_deref() {
+        parts.push(format!(
+            "{} {}",
+            text("storage_max_file_size"),
+            max_file_size
+        ));
+    }
+
+    if let Some(trash_size) = storage.trash_size.as_deref() {
+        parts.push(format!("{} {}", text("storage_trash_size"), trash_size));
+    }
+
+    if let Some(path) = storage.path.as_deref() {
+        parts.push(format!("{} {path}", text("storage_sync_folder")));
+    }
+
+    if is_flatpak() {
+        parts.push(format!(
+            "{} {}",
+            text("flatpak_sync_folder_location"),
+            display_path(&flatpak_persisted_sync_dir())
+        ));
+    }
+
+    parts.join(" ")
 }
 
 fn update_publish_link(publish_link_entry: &gtk::Entry, output: &DiskOutput) {

@@ -9,7 +9,7 @@ use crate::models::yandex_disk::{DiskRequest, SetupConfig, UiEvent};
 use crate::pages::{
     advanced::build_advanced_page,
     overview::{OverviewLabels, build_overview_page},
-    setup::build_setup_page,
+    setup::{build_auth_code_display, build_setup_page},
     sharing::build_sharing_page,
     welcome::build_welcome_page,
 };
@@ -23,6 +23,9 @@ use std::sync::mpsc;
 struct DashboardLabels {
     status_title: gtk::Label,
     status_detail: gtk::Label,
+    storage_title: gtk::Label,
+    storage_detail: gtk::Label,
+    storage_bar: gtk::ProgressBar,
     activity_title: gtk::Label,
     activity_detail: gtk::Label,
 }
@@ -54,6 +57,7 @@ pub(crate) fn build(app: &adw::Application) {
     toolbar_view.add_top_bar(&header.header);
 
     let labels = build_dashboard_labels();
+    let auth_code_display = build_auth_code_display();
     let (output_view, output_buffer) = build_output_view();
 
     let overview = build_overview_page(
@@ -64,12 +68,21 @@ pub(crate) fn build(app: &adw::Application) {
         &OverviewLabels {
             status_title: &labels.status_title,
             status_detail: &labels.status_detail,
+            storage_title: &labels.storage_title,
+            storage_detail: &labels.storage_detail,
+            storage_bar: &labels.storage_bar,
             activity_title: &labels.activity_title,
             activity_detail: &labels.activity_detail,
         },
     );
     let welcome = build_welcome_page(&stack);
-    let setup_form = build_setup_page(&window, &sender, &output_buffer, &setup_controls);
+    let setup_form = build_setup_page(
+        &window,
+        &sender,
+        &output_buffer,
+        &setup_controls,
+        &auth_code_display,
+    );
     let settings = build_settings_page(&setup_form, &stack, &header.main_navigation);
     let (sharing, publish_link_entry) =
         build_sharing_page(&window, &sender, &output_buffer, &option_controls);
@@ -102,6 +115,12 @@ pub(crate) fn build(app: &adw::Application) {
             status_detail: labels.status_detail,
             header_status_indicator: header.status_indicator,
             header_status_label: header.status_label,
+            auth_code_container: auth_code_display.container.clone(),
+            auth_code_title: auth_code_display.title.clone(),
+            auth_code_detail: auth_code_display.detail.clone(),
+            storage_title: labels.storage_title,
+            storage_detail: labels.storage_detail,
+            storage_bar: labels.storage_bar,
             activity_title: labels.activity_title,
             activity_detail: labels.activity_detail,
             publish_link_entry,
@@ -131,6 +150,19 @@ fn build_dashboard_labels() -> DashboardLabels {
     status_detail.set_wrap(true);
     status_detail.set_xalign(0.0);
 
+    let storage_title = gtk::Label::new(Some(text("storage_waiting_for_status")));
+    storage_title.set_xalign(0.0);
+    storage_title.add_css_class("diskette-title");
+
+    let storage_detail = gtk::Label::new(Some(text("storage_status_hint")));
+    storage_detail.set_xalign(0.0);
+    storage_detail.set_wrap(true);
+    storage_detail.add_css_class("diskette-muted");
+
+    let storage_bar = gtk::ProgressBar::new();
+    storage_bar.set_show_text(true);
+    storage_bar.set_text(Some(text("not_available_yet")));
+
     let activity_title = gtk::Label::new(Some(text("no_recent_activity")));
     activity_title.add_css_class("diskette-title");
     activity_title.set_xalign(0.0);
@@ -143,6 +175,9 @@ fn build_dashboard_labels() -> DashboardLabels {
     DashboardLabels {
         status_title,
         status_detail,
+        storage_title,
+        storage_detail,
+        storage_bar,
         activity_title,
         activity_detail,
     }

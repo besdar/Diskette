@@ -1,9 +1,9 @@
 use crate::components::yandex_disk::{OptionControls, SetupControls, connect_command_button};
 use crate::components::{append_output, page_box, section};
 use crate::i18n::text;
-use crate::models::yandex_disk::{DiskRequest, UiEvent};
+use crate::models::yandex_disk::{DiskRequest, UiEvent, sync_dir_open_path};
 use crate::settings::INSTALL_DOCS_URL;
-use crate::utils::{open_uri, open_uri_result};
+use crate::utils::{display_path, open_uri};
 use gtk::gio;
 use gtk::prelude::*;
 use gtk4 as gtk;
@@ -13,6 +13,9 @@ use std::sync::mpsc;
 pub(crate) struct OverviewLabels<'a> {
     pub(crate) status_title: &'a gtk::Label,
     pub(crate) status_detail: &'a gtk::Label,
+    pub(crate) storage_title: &'a gtk::Label,
+    pub(crate) storage_detail: &'a gtk::Label,
+    pub(crate) storage_bar: &'a gtk::ProgressBar,
     pub(crate) activity_title: &'a gtk::Label,
     pub(crate) activity_detail: &'a gtk::Label,
 }
@@ -38,7 +41,11 @@ pub(crate) fn build_overview_page(
     let (status_group, buttons) = build_status_group(labels.status_title, labels.status_detail);
 
     page.append(&status_group);
-    page.append(&build_storage_group());
+    page.append(&build_storage_group(
+        labels.storage_title,
+        labels.storage_detail,
+        labels.storage_bar,
+    ));
     page.append(&build_activity_group(
         labels.activity_title,
         labels.activity_detail,
@@ -101,27 +108,18 @@ fn build_status_group(
     )
 }
 
-fn build_storage_group() -> gtk::Box {
+fn build_storage_group(
+    storage_title: &gtk::Label,
+    storage_detail: &gtk::Label,
+    storage_bar: &gtk::ProgressBar,
+) -> gtk::Box {
     let group = section(text("storage"));
     let card = gtk::Box::new(gtk::Orientation::Vertical, 8);
     card.add_css_class("diskette-card");
 
-    let title = gtk::Label::new(Some(text("storage_waiting_for_status")));
-    title.set_xalign(0.0);
-    title.add_css_class("diskette-title");
-
-    let detail = gtk::Label::new(Some(text("storage_status_hint")));
-    detail.set_xalign(0.0);
-    detail.set_wrap(true);
-    detail.add_css_class("diskette-muted");
-
-    let bar = gtk::ProgressBar::new();
-    bar.set_show_text(true);
-    bar.set_text(Some(text("not_available_yet")));
-
-    card.append(&title);
-    card.append(&bar);
-    card.append(&detail);
+    card.append(storage_title);
+    card.append(storage_bar);
+    card.append(storage_detail);
     group.append(&card);
     group
 }
@@ -197,21 +195,50 @@ fn connect_utility_buttons(
         let setup_controls = setup_controls.clone();
         let output_buffer = output_buffer.clone();
         buttons.open_folder.connect_clicked(move |_| {
-            let path = setup_controls.sync_dir_or_default();
-            if let Err(error) = fs::create_dir_all(&path) {
+            let sync_path = setup_controls.sync_dir_or_default();
+            let open_path = sync_dir_open_path(&sync_path);
+
+            for path in [&sync_path, &open_path] {
+                if let Err(error) = fs::create_dir_all(path) {
+                    append_output(
+                        &output_buffer,
+                        &format!("{} {error}\n", text("failed_to_open_sync_folder")),
+                    );
+                    return;
+                }
+            }
+
+            append_output(
+                &output_buffer,
+                &format!(
+                    "{} {}\n",
+                    text("opening_sync_folder"),
+                    display_path(&sync_path)
+                ),
+            );
+
+            if open_path != sync_path {
                 append_output(
                     &output_buffer,
-                    &format!("{} {error}\n", text("failed_to_open_sync_folder")),
-                );
-                return;
-            }
-            let uri = gio::File::for_path(path).uri();
-            if let Err(error) = open_uri_result(&uri) {
-                append_output(
-                    &output_buffer,
-                    &format!("{} {error}\n", text("failed_to_open_sync_folder")),
+                    &format!(
+                        "{} {}\n",
+                        text("flatpak_sync_folder_location"),
+                        display_path(&open_path)
+                    ),
                 );
             }
+
+            let file = gio::File::for_path(open_path);
+            let launcher = gtk::FileLauncher::new(Some(&file));
+            let output_buffer = output_buffer.clone();
+            launcher.launch(None::<&gtk::Window>, None::<&gio::Cancellable>, move |result| {
+                if let Err(error) = result {
+                    append_output(
+                        &output_buffer,
+                        &format!("{} {error}\n", text("failed_to_open_sync_folder")),
+                    );
+                }
+            });
         });
     }
 

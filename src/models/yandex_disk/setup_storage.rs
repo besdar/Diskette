@@ -1,7 +1,7 @@
 use super::command_line::FLATPAK_YANDEX_BINARY;
 use crate::settings::APP_ID;
 use std::env;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 pub(crate) fn config_file() -> PathBuf {
     yandex_config_dir().join("config.cfg")
@@ -15,6 +15,23 @@ pub(super) fn yandex_config_dir() -> PathBuf {
 
 pub(super) fn default_sync_dir() -> PathBuf {
     home_dir().join("Yandex.Disk")
+}
+
+pub(crate) fn sync_dir_open_path(sync_dir: &Path) -> PathBuf {
+    if is_flatpak() && sync_dir == default_sync_dir() {
+        flatpak_persisted_sync_dir()
+    } else {
+        sync_dir.to_path_buf()
+    }
+}
+
+pub(crate) fn flatpak_persisted_sync_dir() -> PathBuf {
+    let app_id = env::var("FLATPAK_ID").unwrap_or_else(|_| APP_ID.to_owned());
+    home_dir()
+        .join(".var")
+        .join("app")
+        .join(app_id)
+        .join("Yandex.Disk")
 }
 
 pub(crate) fn is_flatpak() -> bool {
