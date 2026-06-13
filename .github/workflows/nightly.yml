@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install system dependencies
         run: |
@@ -67,7 +67,7 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install system dependencies
         run: |
@@ -92,7 +92,7 @@ jobs:
           cp target/debian/*.deb dist/deb/
 
       - name: Upload DEB artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: diskette-nightly-deb-${{ github.sha }}
           path: dist/deb/*.deb
@@ -108,7 +108,7 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install system dependencies
         run: |
@@ -132,7 +132,7 @@ jobs:
           cp target/generate-rpm/*.rpm dist/rpm/
 
       - name: Upload RPM artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: diskette-nightly-rpm-${{ github.sha }}
           path: dist/rpm/*.rpm
@@ -146,7 +146,7 @@ jobs:
 
     steps:
       - name: Check out source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Flatpak tooling
         run: |
@@ -164,6 +164,7 @@ jobs:
           mkdir -p dist/flatpak
           flatpak-builder \
             --force-clean \
+            --disable-rofiles-fuse \
             --user \
             --install-deps-from=flathub \
             --repo=dist/flatpak/repo \
@@ -175,7 +176,7 @@ jobs:
             "${APP_ID}"
 
       - name: Upload Flatpak artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: diskette-nightly-flatpak-${{ github.sha }}
           path: dist/flatpak/*.flatpak
