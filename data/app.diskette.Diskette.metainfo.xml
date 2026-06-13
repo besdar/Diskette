@@ -4,7 +4,6 @@
   <metadata_license>MIT</metadata_license>
   <project_license>MIT</project_license>
   <name>Diskette</name>
-  <name xml:lang="ru">Diskette</name>
   <summary>Manage Yandex Disk from a GNOME desktop</summary>
   <summary xml:lang="ru">Управляйте Яндекс Диском из GNOME</summary>
   <description>

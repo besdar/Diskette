@@ -24,6 +24,6 @@ already available from package manager metadata.
 ## Flatpak
 
 The Flathub-oriented manifest lives in `flatpak/`. It uses GNOME runtime 50,
-downloads the Yandex CLI package as Flatpak `extra-data` at install time, and
-persists the app-private `~/Yandex.Disk` folder without granting full home
-filesystem access.
+downloads the Yandex CLI deb during the build, installs the CLI into the app
+prefix, and persists the app-private `~/Yandex.Disk` folder without granting
+full home filesystem access.

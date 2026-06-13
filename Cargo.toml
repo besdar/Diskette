@@ -2,15 +2,15 @@
 name = "diskette"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.92"
 description = "A GNOME wrapper for the Yandex Disk CLI"
 license = "MIT"
 
 [dependencies]
 anyhow = "1.0"
 dirs = "6.0"
-gtk4 = { version = "0.10", features = ["v4_12"] }
-libadwaita = { version = "0.8", features = ["v1_4"] }
+gtk4 = { version = "0.11", features = ["v4_12"] }
+libadwaita = { version = "0.9", features = ["v1_4"] }
 mimalloc = "0.1"
 
 [lints.rust]

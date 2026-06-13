@@ -26,18 +26,23 @@ cleanup:
   - /share/man
 
 modules:
-  - name: yandex-disk-extra
+  - name: yandex-disk
     buildsystem: simple
     build-commands:
-      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+      - |
+        set -eu
+        package="yandex-disk_0.1.6.1080_amd64.deb"
+        data_member="$(ar t "$package" | sed -n '/^data[.]tar/p' | head -n 1)"
+        test -n "$data_member"
+        ar x "$package" "$data_member"
+        mkdir -p yandex-disk-root
+        tar -xf "$data_member" -C yandex-disk-root ./usr/bin/yandex-disk
+        install -Dm755 yandex-disk-root/usr/bin/yandex-disk /app/bin/yandex-disk
     sources:
       - type: file
-        path: apply_extra.sh
-      - type: extra-data
-        filename: yandex-disk_0.1.6.1080_amd64.deb
         url: https://repo.yandex.ru/yandex-disk/deb/pool/main/y/yandex-disk/yandex-disk_0.1.6.1080_amd64.deb
         sha256: 47ba503b4dfccecc824386d67d686abe4b5356b8b546e48fce8811b5fa88a718
-        size: 4796514
+        dest-filename: yandex-disk_0.1.6.1080_amd64.deb
         only-arches:
           - x86_64
         x-checker-data:

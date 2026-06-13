@@ -1,3 +1,4 @@
+use super::command_line::FLATPAK_YANDEX_BINARY;
 use crate::settings::APP_ID;
 use std::env;
 use std::path::PathBuf;
@@ -29,7 +30,7 @@ pub(super) fn autostart_file() -> PathBuf {
 
 pub(super) fn autostart_contents() -> String {
     let exec = if env::var("FLATPAK_ID").is_ok() {
-        format!("flatpak run --command=/app/extra/usr/bin/yandex-disk {APP_ID} start")
+        format!("flatpak run --command={FLATPAK_YANDEX_BINARY} {APP_ID} start")
     } else {
         "yandex-disk start".to_owned()
     };

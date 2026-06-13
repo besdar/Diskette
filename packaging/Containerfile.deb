@@ -2,20 +2,22 @@ FROM docker.io/library/debian:stable-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PATH=/root/.cargo/bin:$PATH
+ARG RUST_VERSION=1.92.0
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     appstream \
     build-essential \
     ca-certificates \
-    cargo \
     curl \
     desktop-file-utils \
     libadwaita-1-dev \
     libgtk-4-dev \
     librsvg2-bin \
     pkg-config \
-    rustc \
     && rm -rf /var/lib/apt/lists/*
+
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
+    | sh -s -- -y --profile minimal --default-toolchain "$RUST_VERSION"
 
 RUN cargo install cargo-deb --version 2.6.1 --locked
 

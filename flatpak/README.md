@@ -5,8 +5,11 @@
 Important submission notes:
 
 - The manifest uses GNOME runtime 50, which is currently available on Flathub.
-- The Yandex Disk CLI is downloaded as `extra-data` from Yandex during user
-  installation. The binary is not committed into this repository.
+- The app depends on GTK 4 and libadwaita. Freedesktop 25.08 does not provide
+  those pkg-config modules, so using `org.freedesktop.Platform` would require
+  bundling the GTK/libadwaita stack as extra modules.
+- The Yandex Disk CLI deb is downloaded from Yandex during the Flatpak build.
+  The binary is not committed into this repository.
 - `--persist=Yandex.Disk` keeps the Flatpak sync folder app-private while
   avoiding full home filesystem access.
 - The `app.diskette.Diskette` app ID is a neutral default. Replace it if the
@@ -30,10 +33,8 @@ Flathub-style sandboxed build:
 flatpak run --command=flathub-build org.flatpak.Builder flatpak/app.diskette.Diskette.yml
 ```
 
-Adding `--install` makes Flatpak apply the Yandex Disk `extra-data` package.
-That installation step requires unprivileged user namespaces for `bwrap`; in
-nested or locked-down environments it can fail even when the build and export
-are valid.
+Add `--install` when you also want to install the built app into the user
+installation.
 
 Flathub-style repo lint:
 
