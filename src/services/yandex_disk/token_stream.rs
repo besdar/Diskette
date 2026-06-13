@@ -222,7 +222,8 @@ mod tests {
 
     #[test]
     fn extracts_device_auth_code_from_cli_output() {
-        let output = "Go to the page https://ya.ru/device and enter the code ‘nw7nnyht’ within 300 seconds.";
+        let output =
+            "Go to the page https://ya.ru/device and enter the code ‘nw7nnyht’ within 300 seconds.";
 
         assert_eq!(extract_url(output).as_deref(), Some("https://ya.ru/device"));
         assert_eq!(extract_auth_code(output).as_deref(), Some("nw7nnyht"));

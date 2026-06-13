@@ -214,20 +214,12 @@ fn update_status(
     }
 }
 
-fn update_activity(
-    activity_title: &gtk::Label,
-    activity_detail: &gtk::Label,
-    output: &DiskOutput,
-) {
+fn update_activity(activity_title: &gtk::Label, activity_detail: &gtk::Label, output: &DiskOutput) {
     activity_title.set_text(&format!("{} {}", text("last_action"), output.label));
     activity_detail.set_text(&output.summary());
 }
 
-fn show_auth_code(
-    ui: &EventPumpUi,
-    code: &str,
-    auth_url: Option<&str>,
-) {
+fn show_auth_code(ui: &EventPumpUi, code: &str, auth_url: Option<&str>) {
     let auth_url = auth_url.unwrap_or("https://ya.ru/device");
     let title_text = format!("{} {code}", text("authorization_code_ready"));
     let detail_text = format!(
@@ -261,7 +253,11 @@ fn update_storage(
     }
 
     if let Some(storage) = output.storage_status() {
-        storage_title.set_text(&format!("{} {}", text("storage_available"), storage.available));
+        storage_title.set_text(&format!(
+            "{} {}",
+            text("storage_available"),
+            storage.available
+        ));
         storage_detail.set_text(&format_storage_detail(&storage));
         storage_bar.set_fraction(storage.used_fraction().unwrap_or_default());
         storage_bar.set_text(Some(&format!(

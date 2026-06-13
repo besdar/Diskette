@@ -231,14 +231,18 @@ fn connect_utility_buttons(
             let file = gio::File::for_path(open_path);
             let launcher = gtk::FileLauncher::new(Some(&file));
             let output_buffer = output_buffer.clone();
-            launcher.launch(None::<&gtk::Window>, None::<&gio::Cancellable>, move |result| {
-                if let Err(error) = result {
-                    append_output(
-                        &output_buffer,
-                        &format!("{} {error}\n", text("failed_to_open_sync_folder")),
-                    );
-                }
-            });
+            launcher.launch(
+                None::<&gtk::Window>,
+                None::<&gio::Cancellable>,
+                move |result| {
+                    if let Err(error) = result {
+                        append_output(
+                            &output_buffer,
+                            &format!("{} {error}\n", text("failed_to_open_sync_folder")),
+                        );
+                    }
+                },
+            );
         });
     }
 
