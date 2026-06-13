@@ -1,0 +1,22 @@
+FROM registry.fedoraproject.org/fedora-toolbox:43
+
+ENV PATH=/root/.cargo/bin:$PATH
+
+RUN dnf -y install \
+    appstream \
+    cargo \
+    desktop-file-utils \
+    gcc \
+    gtk4-devel \
+    libadwaita-devel \
+    librsvg2-tools \
+    pkgconf-pkg-config \
+    rpm-build \
+    rust \
+    && dnf clean all
+
+RUN cargo install cargo-generate-rpm --locked
+
+WORKDIR /work
+
+CMD ["bash", "-lc", "cargo build --release && cargo generate-rpm && mkdir -p dist/rpm && cp target/generate-rpm/*.rpm dist/rpm/"]

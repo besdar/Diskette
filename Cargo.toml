@@ -1,0 +1,51 @@
+[package]
+name = "diskette"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "A GNOME wrapper for the Yandex Disk CLI"
+license = "MIT"
+
+[dependencies]
+anyhow = "1.0"
+dirs = "6.0"
+gtk4 = { version = "0.10", features = ["v4_12"] }
+libadwaita = { version = "0.8", features = ["v1_4"] }
+mimalloc = "0.1"
+
+[lints.rust]
+unsafe_code = "warn"
+
+[lints.clippy]
+all = "warn"
+pedantic = "warn"
+
+[profile.release]
+codegen-units = 1
+lto = "thin"
+strip = "symbols"
+
+[package.metadata.deb]
+maintainer = "Diskette contributors"
+copyright = "2026, Diskette contributors"
+license-file = ["LICENSE", "0"]
+depends = "$auto, yandex-disk"
+section = "utils"
+priority = "optional"
+assets = [
+    ["target/release/diskette", "usr/bin/diskette", "755"],
+    ["data/app.diskette.Diskette.desktop", "usr/share/applications/app.diskette.Diskette.desktop", "644"],
+    ["data/app.diskette.Diskette.metainfo.xml", "usr/share/metainfo/app.diskette.Diskette.metainfo.xml", "644"],
+    ["data/icons/app.diskette.Diskette.svg", "usr/share/icons/hicolor/scalable/apps/app.diskette.Diskette.svg", "644"],
+]
+
+[package.metadata.generate-rpm]
+assets = [
+    { source = "target/release/diskette", dest = "/usr/bin/diskette", mode = "755" },
+    { source = "data/app.diskette.Diskette.desktop", dest = "/usr/share/applications/app.diskette.Diskette.desktop", mode = "644" },
+    { source = "data/app.diskette.Diskette.metainfo.xml", dest = "/usr/share/metainfo/app.diskette.Diskette.metainfo.xml", mode = "644" },
+    { source = "data/icons/app.diskette.Diskette.svg", dest = "/usr/share/icons/hicolor/scalable/apps/app.diskette.Diskette.svg", mode = "644" },
+]
+
+[package.metadata.generate-rpm.requires]
+yandex-disk = "*"

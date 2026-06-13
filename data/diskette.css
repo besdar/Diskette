@@ -1,0 +1,79 @@
+@define-color accent_bg_color #fc3f1d;
+@define-color accent_color #fc3f1d;
+@define-color accent_fg_color #ffffff;
+
+.diskette-title {
+  font-weight: 700;
+}
+
+.diskette-command-output {
+  font-family: monospace;
+  font-size: 0.92em;
+}
+
+.diskette-card {
+  background: alpha(@window_fg_color, 0.05);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.diskette-header-status {
+  padding: 0 6px;
+}
+
+.diskette-status-dot {
+  border-radius: 999px;
+  min-height: 10px;
+  min-width: 10px;
+}
+
+.diskette-status-idle {
+  background: alpha(@window_fg_color, 0.35);
+}
+
+.diskette-status-success {
+  background: #33d17a;
+}
+
+.diskette-status-warning {
+  background: #f8e45c;
+}
+
+.diskette-status-error {
+  background: #e01b24;
+}
+
+.diskette-status {
+  border-left: 4px solid @accent_bg_color;
+  padding: 10px 12px;
+}
+
+.diskette-welcome {
+  padding: 18px 24px;
+}
+
+.diskette-welcome-icon {
+  color: @accent_bg_color;
+}
+
+.diskette-step-list {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.diskette-step-badge {
+  background: @accent_bg_color;
+  border-radius: 999px;
+  color: @accent_fg_color;
+  font-weight: 700;
+  min-height: 24px;
+  min-width: 24px;
+}
+
+.diskette-danger {
+  color: #c01c28;
+}
+
+.diskette-muted {
+  opacity: 0.72;
+}

@@ -1,0 +1,124 @@
+# token	Russian translation
+activity_waiting_for_commands	Выполните Состояние, Запуск, Синхронизацию или Публикацию, чтобы увидеть здесь последний результат.
+advanced	Дополнительно
+advanced_setup	Дополнительная настройка
+advanced_setup_hint	Прокси и параметры демона доступны для пользовательских настроек CLI.
+auth_file	Файл авторизации
+authentication_failed	Авторизация не удалась
+authentication_setup_hint	Diskette сохранит конфигурацию CLI перед открытием авторизации Яндекса в браузере.
+auto	Авто
+autostart_disabled	Автозапуск отключен.
+autostart_file	Файл автозапуска:
+choose	Выбрать
+choose_auth_file	Выберите файл авторизации
+choose_file	Выбрать файл
+choose_file_to_publish	Выберите файл для публикации
+choose_folder	Выбрать папку
+choose_folder_to_publish	Выберите папку для публикации
+choose_sync_directory	Выберите папку синхронизации
+choose_sync_folder	Выберите папку синхронизации
+cli_coverage	Поддержка CLI
+cli_coverage_description	Diskette предоставляет token, start, status, stop, sync, publish, unpublish, help, настройку конфигурации и документированные параметры команд.
+command_docs	Документация команд
+command_failed	Команда завершилась с ошибкой
+command_failed_sentence	Команда завершилась с ошибкой.
+command_finished	Команда завершена
+command_finished_successfully	Команда успешно завершена.
+command_options	Параметры команд
+command_output	Вывод команд
+config_file	Файл конфигурации
+configuration_save_failed	Не удалось сохранить конфигурацию:
+configuration_saved	Конфигурация сохранена:
+connect_yandex_disk	Подключите Яндекс Диск
+connected	Подключено
+copy_link	Копировать ссылку
+daemon	Демон
+daemon_status	Состояние демона
+default	По умолчанию
+diskette_ready	Diskette готов. Команды выполняются в фоне, а их вывод появляется здесь.
+done	Готово
+error	Ошибка
+exclude_dirs	Исключенные папки
+failed	ошибка
+failed_to_open_authentication_page	Не удалось открыть страницу авторизации:
+failed_to_open_sync_folder	Не удалось открыть папку синхронизации:
+file_or_folder_path	Путь к файлу или папке
+flatpak_sync_folder_locked	Папка Yandex.Disk управляется песочницей Flatpak и не меняется здесь.
+force_sync	Синхронизировать
+foreground_daemon_launched_with_pid	Демон в переднем плане запущен с PID
+get_started	Начать
+get_oauth_token_instruction	Получите OAuth-токен в браузере перед запуском синхронизации.
+get_token	Получить токен
+install_cli	Установить CLI
+last_action	Последнее действие:
+launch_foreground_daemon	Запустить демон в переднем плане
+launch_sync_at_login	Запускать синхронизацию при входе
+learn_more	Подробнее
+manual	Вручную
+manual_proxy	Прокси вручную
+no	Нет
+no_exit_code	нет кода выхода
+no_recent_activity	Недавних действий нет
+not_available_yet	Пока недоступно
+onboarding_step_auth	Подключите аккаунт Яндекс Диска через официальный поток токена CLI.
+onboarding_step_folder	Выберите локальную папку, где будут храниться синхронизированные файлы.
+onboarding_step_sync	Проверьте настройки, затем запустите или возобновите синхронизацию.
+open_sync_folder	Открыть папку синхронизации
+open_auth_page	Открыть авторизацию
+open_yandex_disk_cli_documentation	Открыть документацию CLI Яндекс Диска
+opening_authentication_page	Открывается страница авторизации:
+overwrite_local_conflicts	Перезаписывать локальные конфликты
+overview	Обзор
+path	Путь
+paths	Пути
+pause_sync	Пауза
+proxy_mode	Режим прокси
+public_links	Публичные ссылки
+publish	Опубликовать
+publish_requires_path	Для публикации нужен путь к файлу или папке.
+published_link	Публичная ссылка
+published_link_copied	Публичная ссылка скопирована в буфер обмена.
+published_link_hint	После успешной публикации Diskette извлечет публичный URL из вывода CLI.
+published_link_placeholder	Публичной ссылки пока нет
+queued	В очереди:
+read_only_sync	Синхронизация только для чтения
+recent_activity	Недавняя активность
+reference	Справочник
+refresh_status	Обновить состояние
+resume_sync	Продолжить
+review_settings	Проверьте настройки
+run_get_token_first	Перед запуском синхронизации выполните Получить токен.
+run_status_to_inspect_daemon	Запустите Состояние, чтобы проверить демон Яндекс Диска.
+save_configuration	Сохранить конфигурацию
+saving_yandex_disk_configuration	Сохранение конфигурации Яндекс Диска...
+selected_file_no_local_path	у выбранного файла нет локального пути
+selected_folder_no_local_path	у выбранной папки нет локального пути
+settings	Настройки
+sharing	Доступ
+show_cli_help	Показать справку CLI
+start	Запустить
+start_or_status_after_token	Запустите синхронизацию или выполните Состояние, чтобы проверить демон.
+status	Состояние
+status_check_failed	Проверка состояния завершилась с ошибкой
+status_not_checked	Состояние не проверено
+stderr_label	stderr:
+stdout_label	stdout:
+stop	Остановить
+storage	Хранилище
+storage_status_hint	Квота Яндекс Диска появится здесь, когда CLI сообщит ее; полный вывод команд остается ниже.
+storage_waiting_for_status	Выполните Состояние, чтобы проверить хранилище
+success	успех
+sync_directory_hint	Используйте папку ~/Yandex.Disk по умолчанию или выберите другую локальную папку для CLI.
+sync_folder	Папка синхронизации
+sync_settings	Настройки синхронизации
+sync_status	Состояние синхронизации
+sync_now	Синхронизировать
+token_flow_hint	После нажатия Получить токен Diskette откроет браузер и покажет код Яндекса в выводе команд.
+unpublish	Закрыть доступ
+unpublish_requires_path	Для закрытия доступа нужен путь к файлу или папке.
+use_default_folder	Использовать папку по умолчанию
+welcome	Добро пожаловать
+welcome_body	Diskette оборачивает командную строку Яндекс Диска в нативный интерфейс GNOME для настройки, управления синхронизацией и публичных ссылок. Саму синхронизацию по-прежнему выполняет CLI, а Diskette показывает рабочий процесс.
+welcome_title	Добро пожаловать в Diskette
+welcome_to_diskette	Добро пожаловать в Diskette
+yandex_disk_connected	Яндекс Диск подключен

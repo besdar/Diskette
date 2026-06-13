@@ -1,0 +1,61 @@
+id: app.diskette.Diskette
+runtime: org.gnome.Platform
+runtime-version: '50'
+sdk: org.gnome.Sdk
+command: diskette
+
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin
+  env:
+    CARGO_HOME: /run/build/diskette/cargo
+    CARGO_NET_OFFLINE: 'true'
+
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=network
+  - --persist=Yandex.Disk
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /share/man
+
+modules:
+  - name: yandex-disk-extra
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 apply_extra.sh /app/bin/apply_extra
+    sources:
+      - type: file
+        path: apply_extra.sh
+      - type: extra-data
+        filename: yandex-disk_0.1.6.1080_amd64.deb
+        url: https://repo.yandex.ru/yandex-disk/deb/pool/main/y/yandex-disk/yandex-disk_0.1.6.1080_amd64.deb
+        sha256: 47ba503b4dfccecc824386d67d686abe4b5356b8b546e48fce8811b5fa88a718
+        size: 4796514
+        only-arches:
+          - x86_64
+        x-checker-data:
+          type: html
+          url: https://repo.yandex.ru/yandex-disk/deb/pool/main/y/yandex-disk/
+          version-pattern: yandex-disk_([0-9.]+)_amd64\.deb
+          url-template: https://repo.yandex.ru/yandex-disk/deb/pool/main/y/yandex-disk/yandex-disk_$version_amd64.deb
+
+  - name: diskette
+    buildsystem: simple
+    build-commands:
+      - cargo --offline build --release
+      - install -Dm755 target/release/diskette /app/bin/diskette
+      - install -Dm644 data/app.diskette.Diskette.desktop /app/share/applications/app.diskette.Diskette.desktop
+      - install -Dm644 data/app.diskette.Diskette.metainfo.xml /app/share/metainfo/app.diskette.Diskette.metainfo.xml
+      - install -Dm644 data/icons/app.diskette.Diskette.svg /app/share/icons/hicolor/scalable/apps/app.diskette.Diskette.svg
+    sources:
+      - type: git
+        url: https://github.com/besdar/Diskette.git
+        branch: main
+      - cargo-sources.json

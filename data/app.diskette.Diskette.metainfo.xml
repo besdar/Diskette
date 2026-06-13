@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>app.diskette.Diskette</id>
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+  <name>Diskette</name>
+  <name xml:lang="ru">Diskette</name>
+  <summary>Manage Yandex Disk from a GNOME desktop</summary>
+  <summary xml:lang="ru">Управляйте Яндекс Диском из GNOME</summary>
+  <description>
+    <p>
+      Diskette is a GTK desktop wrapper for the Yandex Disk Linux command line
+      client. It exposes synchronization, status, token, publishing, and
+      configuration actions without requiring users to type commands manually.
+    </p>
+    <p xml:lang="ru">
+      Diskette — это GTK-оболочка для Linux-клиента командной строки Яндекс
+      Диска. Она предоставляет синхронизацию, состояние, токен, публикацию и
+      настройку конфигурации без необходимости вводить команды вручную.
+    </p>
+    <p>
+      Diskette is not affiliated with or endorsed by Yandex. Yandex Disk is a
+      trademark of its respective owner.
+    </p>
+    <p xml:lang="ru">
+      Diskette не связана с Яндексом и не одобрена им. Яндекс Диск является
+      товарным знаком соответствующего владельца.
+    </p>
+  </description>
+  <launchable type="desktop-id">app.diskette.Diskette.desktop</launchable>
+  <categories>
+    <category>Network</category>
+    <category>FileTransfer</category>
+  </categories>
+  <url type="homepage">https://yandex.com/support/yandex-360/customers/disk/desktop/linux/en/cli-commands</url>
+  <url type="help">https://yandex.com/support/yandex-360/customers/disk/desktop/linux/en/cli-commands</url>
+  <content_rating type="oars-1.1" />
+  <releases>
+    <release version="0.1.0" date="2026-06-07">
+      <description>
+        <p>Initial release with graphical wrappers for the Yandex Disk CLI.</p>
+        <p xml:lang="ru">Первый выпуск с графической оболочкой для CLI Яндекс Диска.</p>
+      </description>
+    </release>
+  </releases>
+  <developer id="app.diskette">
+    <name>Diskette contributors</name>
+    <name xml:lang="ru">Участники Diskette</name>
+  </developer>
+</component>

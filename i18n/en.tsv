@@ -1,0 +1,124 @@
+# token	English translation
+activity_waiting_for_commands	Run Status, Start, Sync, or Publish to see the latest command result here.
+advanced	Advanced
+advanced_setup	Advanced setup
+advanced_setup_hint	Proxy and daemon details stay available for custom CLI setups.
+auth_file	Auth file
+authentication_failed	Authentication failed
+authentication_setup_hint	Diskette saves the CLI configuration before opening the Yandex authentication flow in your browser.
+auto	Auto
+autostart_disabled	Autostart disabled.
+autostart_file	Autostart file:
+choose	Choose
+choose_auth_file	Choose auth file
+choose_file	Choose file
+choose_file_to_publish	Choose file to publish
+choose_folder	Choose folder
+choose_folder_to_publish	Choose folder to publish
+choose_sync_directory	Choose sync directory
+choose_sync_folder	Choose sync folder
+cli_coverage	CLI coverage
+cli_coverage_description	Diskette exposes token, start, status, stop, sync, publish, unpublish, help, setup configuration, and the documented command options.
+command_docs	Command docs
+command_failed	Command failed
+command_failed_sentence	Command failed.
+command_finished	Command finished
+command_finished_successfully	Command finished successfully.
+command_options	Command options
+command_output	Command output
+config_file	Config file
+configuration_save_failed	Configuration save failed:
+configuration_saved	Configuration saved:
+connect_yandex_disk	Connect Yandex Disk
+connected	Connected
+copy_link	Copy link
+daemon	Daemon
+daemon_status	Daemon status
+default	Default
+diskette_ready	Diskette is ready. Commands run in the background and their output appears here.
+done	Done
+error	Error
+exclude_dirs	Exclude dirs
+failed	failed
+failed_to_open_authentication_page	Failed to open authentication page:
+failed_to_open_sync_folder	Failed to open sync folder:
+file_or_folder_path	File or folder path
+flatpak_sync_folder_locked	Yandex.Disk folder is managed by the Flatpak sandbox and cannot be changed here.
+force_sync	Force sync
+foreground_daemon_launched_with_pid	Foreground daemon launched with process id
+get_started	Get Started
+get_oauth_token_instruction	Get an OAuth token in your browser before starting synchronization.
+get_token	Get token
+install_cli	Install CLI
+last_action	Last action:
+launch_foreground_daemon	Launch foreground daemon
+launch_sync_at_login	Launch sync at login
+learn_more	Learn More
+manual	Manual
+manual_proxy	Manual proxy
+no	No
+no_exit_code	no exit code
+no_recent_activity	No recent activity
+not_available_yet	Not available yet
+onboarding_step_auth	Connect your Yandex Disk account with the official CLI token flow.
+onboarding_step_folder	Choose the local folder where synced files should live.
+onboarding_step_sync	Review settings, then start or resume synchronization.
+open_sync_folder	Open sync folder
+open_auth_page	Open Auth Page
+open_yandex_disk_cli_documentation	Open Yandex Disk CLI documentation
+opening_authentication_page	Opening authentication page:
+overwrite_local_conflicts	Overwrite local conflicts
+overview	Overview
+path	Path
+paths	Paths
+pause_sync	Pause
+proxy_mode	Proxy mode
+public_links	Public links
+publish	Publish
+publish_requires_path	Publish requires a file or folder path.
+published_link	Published link
+published_link_copied	Published link copied to the clipboard.
+published_link_hint	After publishing succeeds, Diskette extracts the public URL from CLI output.
+published_link_placeholder	No public link yet
+queued	Queued:
+read_only_sync	Read-only sync
+recent_activity	Recent activity
+reference	Reference
+refresh_status	Refresh status
+resume_sync	Resume
+review_settings	Review settings
+run_get_token_first	Run Get token before starting synchronization.
+run_status_to_inspect_daemon	Run Status to inspect the Yandex Disk daemon.
+save_configuration	Save configuration
+saving_yandex_disk_configuration	Saving Yandex Disk configuration...
+selected_file_no_local_path	selected file does not have a local path
+selected_folder_no_local_path	selected folder does not have a local path
+settings	Settings
+sharing	Sharing
+show_cli_help	Show CLI help
+start	Start
+start_or_status_after_token	Start synchronization or run Status to inspect the daemon.
+status	Status
+status_check_failed	Status check failed
+status_not_checked	Status not checked
+stderr_label	stderr:
+stdout_label	stdout:
+stop	Stop
+storage	Storage
+storage_status_hint	Yandex Disk quota is shown here when the CLI reports it; full command output remains below.
+storage_waiting_for_status	Run Status to inspect storage details
+success	success
+sync_directory_hint	Use the default ~/Yandex.Disk folder or choose another local folder for the CLI.
+sync_folder	Sync folder
+sync_settings	Sync settings
+sync_status	Sync status
+sync_now	Sync now
+token_flow_hint	After pressing Get token, Diskette opens the browser and shows the Yandex code in Command output.
+unpublish	Unpublish
+unpublish_requires_path	Unpublish requires a file or folder path.
+use_default_folder	Use Default Folder
+welcome	Welcome
+welcome_body	Diskette wraps the Yandex Disk command-line tool in a native GNOME interface for setup, sync control, and public links. The CLI keeps doing the actual synchronization while Diskette keeps the workflow visible.
+welcome_title	Welcome to Diskette
+welcome_to_diskette	Welcome to Diskette
+yandex_disk_connected	Yandex Disk connected

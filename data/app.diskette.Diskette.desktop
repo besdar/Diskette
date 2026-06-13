@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Diskette
+Name[ru]=Diskette
+Comment=Manage Yandex Disk from a GNOME desktop
+Comment[ru]=Управляйте Яндекс Диском из GNOME
+Exec=diskette
+Icon=app.diskette.Diskette
+Terminal=false
+Categories=GTK;GNOME;Network;FileTransfer;
+StartupNotify=true
+X-GNOME-UsesNotifications=true
