@@ -121,6 +121,9 @@ jobs:
             rpm-build \
             rust
 
+      - name: Install cargo-generate-rpm
+        run: cargo install cargo-generate-rpm --locked --root /usr/local
+
       - name: Build RPM package
         run: |
           cargo build --release
@@ -155,9 +158,6 @@ jobs:
       - name: Add Flathub remote
         run: |
           flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-
-      - name: Refresh Flatpak source archive
-        run: ./flatpak/update-source-archive.sh
 
       - name: Build Flatpak bundle
         run: |
