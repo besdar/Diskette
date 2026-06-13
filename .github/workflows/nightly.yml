@@ -121,9 +121,6 @@ jobs:
             rpm-build \
             rust
 
-      - name: Install cargo-generate-rpm
-        run: cargo install cargo-generate-rpm --locked --root /usr/local
-
       - name: Build RPM package
         run: |
           cargo build --release
