@@ -1,4 +1,4 @@
-use crate::components::{page_box, section};
+use crate::components::page_box;
 use crate::i18n::text;
 use crate::settings::INSTALL_DOCS_URL;
 use crate::utils::open_uri;
@@ -9,7 +9,7 @@ pub(crate) fn build_welcome_page(stack: &gtk::Stack) -> gtk::Box {
     let page = page_box();
     page.set_valign(gtk::Align::Center);
 
-    let group = section(text("welcome_to_diskette"));
+    let group = gtk::Box::new(gtk::Orientation::Vertical, 16);
     group.add_css_class("diskette-welcome");
     group.set_halign(gtk::Align::Center);
 

@@ -132,5 +132,4 @@ use_default_folder	Use Default Folder
 welcome	Welcome
 welcome_body	Diskette wraps the Yandex Disk command-line tool in a native GNOME interface for setup, sync control, and public links. The CLI keeps doing the actual synchronization while Diskette keeps the workflow visible.
 welcome_title	Welcome to Diskette
-welcome_to_diskette	Welcome to Diskette
 yandex_disk_connected	Yandex Disk connected
