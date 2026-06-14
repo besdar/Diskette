@@ -230,7 +230,7 @@ fn build_settings_page(
     footer.set_margin_end(30);
     footer.set_margin_bottom(18);
 
-    let done_button = gtk::Button::with_label(text("done"));
+    let done_button = gtk::Button::with_label(text("back"));
     done_button.add_css_class("suggested-action");
     footer.append(&done_button);
     page.append(&footer);

@@ -10,10 +10,11 @@ authorization_code_enter	Введите код:
 authorization_code_page	Откройте:
 authorization_code_ready	Код авторизации:
 authorization_waiting	Ожидание авторизации
-authentication_setup_hint	Diskette сохранит конфигурацию CLI перед открытием авторизации Яндекса в браузере.
+authentication_setup_hint	Diskette сохранит текущую конфигурацию, откроет страницу авторизации Яндекса и покажет короткий код для ввода в браузере.
 auto	Авто
 autostart_disabled	Автозапуск отключен.
 autostart_file	Файл автозапуска:
+back	Назад
 choose	Выбрать
 choose_auth_file	Выберите файл авторизации
 choose_file	Выбрать файл

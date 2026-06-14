@@ -10,10 +10,11 @@ authorization_code_enter	Enter code:
 authorization_code_page	Open:
 authorization_code_ready	Authorization code:
 authorization_waiting	Waiting for authorization
-authentication_setup_hint	Diskette saves the CLI configuration before opening the Yandex authentication flow in your browser.
+authentication_setup_hint	Diskette will save the current configuration, open the Yandex authorization page, and show a short code to enter in your browser.
 auto	Auto
 autostart_disabled	Autostart disabled.
 autostart_file	Autostart file:
+back	Back
 choose	Choose
 choose_auth_file	Choose auth file
 choose_file	Choose file

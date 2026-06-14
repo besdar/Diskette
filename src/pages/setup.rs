@@ -61,13 +61,28 @@ pub(crate) fn build_setup_page(
     auth_hint.set_xalign(0.0);
     auth_group.append(&auth_hint);
     auth_group.append(&auth_code_display.container);
-    auth_group.append(&field_row(text("auth_file"), &controls.auth_entry));
-    auth_group.append(&file_pick_row(
+
+    let auth_buttons = gtk::Box::new(gtk::Orientation::Horizontal, 8);
+    auth_buttons.set_halign(gtk::Align::Start);
+    let token_button = gtk::Button::with_label(text("open_auth_page"));
+    let settings_button = gtk::Button::with_label(text("settings"));
+    token_button.add_css_class("suggested-action");
+    auth_buttons.append(&token_button);
+    auth_buttons.append(&settings_button);
+    auth_group.append(&auth_buttons);
+    page.append(&auth_group);
+
+    let settings_box = gtk::Box::new(gtk::Orientation::Vertical, 14);
+    settings_box.set_visible(false);
+
+    let config_group = section(text("settings"));
+    config_group.append(&field_row(text("auth_file"), &controls.auth_entry));
+    config_group.append(&file_pick_row(
         window,
         text("choose_auth_file"),
         &controls.auth_entry,
     ));
-    page.append(&auth_group);
+    settings_box.append(&config_group);
 
     let folder_group = section(text("choose_sync_directory"));
     let folder_hint = gtk::Label::new(Some(text("sync_directory_hint")));
@@ -86,7 +101,7 @@ pub(crate) fn build_setup_page(
     let default_button = gtk::Button::with_label(text("use_default_folder"));
     default_button.set_halign(gtk::Align::Start);
     folder_group.append(&default_button);
-    page.append(&folder_group);
+    settings_box.append(&folder_group);
 
     let review_group = section(text("review_settings"));
     review_group.append(&field_row(text("exclude_dirs"), &controls.exclude_entry));
@@ -98,7 +113,7 @@ pub(crate) fn build_setup_page(
     autostart_row.append(&autostart_label);
     autostart_row.append(&controls.autostart);
     review_group.append(&autostart_row);
-    page.append(&review_group);
+    settings_box.append(&review_group);
 
     let advanced_group = section(text("advanced_setup"));
     let advanced_hint = gtk::Label::new(Some(text("advanced_setup_hint")));
@@ -108,16 +123,14 @@ pub(crate) fn build_setup_page(
     advanced_group.append(&advanced_hint);
     advanced_group.append(&field_row(text("proxy_mode"), &controls.proxy_mode));
     advanced_group.append(&field_row(text("manual_proxy"), &controls.proxy_entry));
-    page.append(&advanced_group);
+    settings_box.append(&advanced_group);
 
     let buttons = gtk::Box::new(gtk::Orientation::Horizontal, 8);
     buttons.set_halign(gtk::Align::Start);
     let save_button = gtk::Button::with_label(text("save_configuration"));
-    let token_button = gtk::Button::with_label(text("open_auth_page"));
-    save_button.add_css_class("suggested-action");
     buttons.append(&save_button);
-    buttons.append(&token_button);
-    page.append(&buttons);
+    settings_box.append(&buttons);
+    page.append(&settings_box);
 
     {
         let sync_entry = controls.sync_entry.clone();
@@ -141,6 +154,14 @@ pub(crate) fn build_setup_page(
                 let result = setup.save().map_err(|error| error.to_string());
                 let _ = sender.send(UiEvent::SetupSaved(result));
             });
+        });
+    }
+
+    {
+        let settings_box = settings_box.clone();
+        settings_button.connect_clicked(move |button| {
+            settings_box.set_visible(true);
+            button.set_visible(false);
         });
     }
 
