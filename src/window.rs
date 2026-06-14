@@ -60,7 +60,7 @@ pub(crate) fn build(app: &adw::Application) {
     let auth_code_display = build_auth_code_display();
     let (output_view, output_buffer) = build_output_view();
 
-    let overview = build_overview_page(
+    let (overview, daemon_buttons) = build_overview_page(
         &sender,
         &output_buffer,
         &option_controls,
@@ -127,6 +127,7 @@ pub(crate) fn build(app: &adw::Application) {
             stack,
             main_navigation: header.main_navigation,
             refresh_button: header.refresh_button,
+            daemon_buttons,
         },
     );
 

@@ -1,7 +1,7 @@
 use crate::components::yandex_disk::{OptionControls, SetupControls, connect_command_button};
 use crate::components::{append_output, page_box, section};
 use crate::i18n::text;
-use crate::models::yandex_disk::{DiskRequest, UiEvent, sync_dir_open_path};
+use crate::models::yandex_disk::{DaemonStatus, DiskRequest, UiEvent, sync_dir_open_path};
 use crate::settings::INSTALL_DOCS_URL;
 use crate::utils::{display_path, open_uri};
 use gtk::gio;
@@ -22,12 +22,35 @@ pub(crate) struct OverviewLabels<'a> {
 
 struct OverviewButtons {
     status: gtk::Button,
+    daemon: DaemonActionButtons,
+    open_folder: gtk::Button,
+    install_docs: gtk::Button,
+}
+
+#[derive(Clone)]
+pub(crate) struct DaemonActionButtons {
     start: gtk::Button,
     sync: gtk::Button,
     stop: gtk::Button,
     foreground_daemon: gtk::Button,
-    open_folder: gtk::Button,
-    install_docs: gtk::Button,
+}
+
+impl DaemonActionButtons {
+    pub(crate) fn show_unknown(&self) {
+        self.start.set_visible(false);
+        self.sync.set_visible(false);
+        self.stop.set_visible(false);
+        self.foreground_daemon.set_visible(false);
+    }
+
+    pub(crate) fn show_daemon_status(&self, status: DaemonStatus) {
+        let running = matches!(status, DaemonStatus::Running);
+
+        self.start.set_visible(!running);
+        self.sync.set_visible(running);
+        self.stop.set_visible(running);
+        self.foreground_daemon.set_visible(!running);
+    }
 }
 
 pub(crate) fn build_overview_page(
@@ -36,9 +59,10 @@ pub(crate) fn build_overview_page(
     option_controls: &OptionControls,
     setup_controls: &SetupControls,
     labels: &OverviewLabels<'_>,
-) -> gtk::Box {
+) -> (gtk::Box, DaemonActionButtons) {
     let page = page_box();
     let (status_group, buttons) = build_status_group(labels.status_title, labels.status_detail);
+    let daemon_buttons = buttons.daemon.clone();
 
     page.append(&status_group);
     page.append(&build_storage_group(
@@ -55,7 +79,7 @@ pub(crate) fn build_overview_page(
     connect_daemon_buttons(&buttons, sender, output_buffer, option_controls);
     connect_utility_buttons(&buttons, setup_controls, output_buffer);
 
-    page
+    (page, daemon_buttons)
 }
 
 fn build_status_group(
@@ -79,11 +103,18 @@ fn build_status_group(
     let no_daemon_button = gtk::Button::with_label(text("launch_foreground_daemon"));
     start_button.add_css_class("suggested-action");
     stop_button.add_css_class("destructive-action");
+    let daemon_buttons = DaemonActionButtons {
+        start: start_button,
+        sync: sync_button,
+        stop: stop_button,
+        foreground_daemon: no_daemon_button,
+    };
+    daemon_buttons.show_unknown();
     buttons.append(&status_button);
-    buttons.append(&start_button);
-    buttons.append(&sync_button);
-    buttons.append(&stop_button);
-    buttons.append(&no_daemon_button);
+    buttons.append(&daemon_buttons.start);
+    buttons.append(&daemon_buttons.sync);
+    buttons.append(&daemon_buttons.stop);
+    buttons.append(&daemon_buttons.foreground_daemon);
     group.append(&buttons);
 
     let utility_buttons = gtk::Box::new(gtk::Orientation::Horizontal, 8);
@@ -98,10 +129,7 @@ fn build_status_group(
         group,
         OverviewButtons {
             status: status_button,
-            start: start_button,
-            sync: sync_button,
-            stop: stop_button,
-            foreground_daemon: no_daemon_button,
+            daemon: daemon_buttons,
             open_folder,
             install_docs,
         },
@@ -157,28 +185,28 @@ fn connect_daemon_buttons(
         DiskRequest::Status,
     );
     connect_command_button(
-        &buttons.start,
+        &buttons.daemon.start,
         sender,
         output_buffer,
         option_controls,
         DiskRequest::Start,
     );
     connect_command_button(
-        &buttons.sync,
+        &buttons.daemon.sync,
         sender,
         output_buffer,
         option_controls,
         DiskRequest::Sync,
     );
     connect_command_button(
-        &buttons.stop,
+        &buttons.daemon.stop,
         sender,
         output_buffer,
         option_controls,
         DiskRequest::Stop,
     );
     connect_command_button(
-        &buttons.foreground_daemon,
+        &buttons.daemon.foreground_daemon,
         sender,
         output_buffer,
         option_controls,

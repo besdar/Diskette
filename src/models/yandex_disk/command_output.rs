@@ -22,6 +22,12 @@ pub(crate) struct StorageStatus {
     pub(crate) trash_size: Option<String>,
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum DaemonStatus {
+    Running,
+    Stopped,
+}
+
 impl DiskOutput {
     pub(crate) fn new(
         label: String,
@@ -130,6 +136,19 @@ impl DiskOutput {
             None
         }
     }
+
+    pub(crate) fn daemon_status(&self) -> Option<DaemonStatus> {
+        match self.label.as_str() {
+            "status" if self.success => Some(DaemonStatus::Running),
+            "status" => Some(DaemonStatus::Stopped),
+            "start" | "foreground daemon" if self.success => Some(DaemonStatus::Running),
+            "stop" if self.success => Some(DaemonStatus::Stopped),
+            "start" | "stop" | "foreground daemon" => {
+                daemon_status_from_output(&self.stdout, &self.stderr)
+            }
+            _ => None,
+        }
+    }
 }
 
 impl StorageStatus {
@@ -216,9 +235,34 @@ fn parse_size_to_bytes(value: &str) -> Option<f64> {
     Some(number * multiplier)
 }
 
+fn daemon_status_from_output(stdout: &str, stderr: &str) -> Option<DaemonStatus> {
+    let output = format!("{stdout}\n{stderr}").to_ascii_lowercase();
+
+    if output.contains("daemon is not running")
+        || output.contains("daemon not running")
+        || output.contains("not running")
+        || output.contains("not started")
+        || output.contains("демон не запущ")
+        || output.contains("не запущен")
+    {
+        return Some(DaemonStatus::Stopped);
+    }
+
+    if output.contains("synchronization core status:")
+        || output.contains("daemon is running")
+        || output.contains("already running")
+        || output.contains("демон уже запущ")
+        || output.contains("демон запущ")
+    {
+        return Some(DaemonStatus::Running);
+    }
+
+    None
+}
+
 #[cfg(test)]
 mod tests {
-    use super::DiskOutput;
+    use super::{DaemonStatus, DiskOutput};
 
     #[test]
     fn parses_storage_status_from_yandex_disk_status_output() {
@@ -264,5 +308,70 @@ Path to Yandex.Disk directory: '/home/user/Yandex.Disk'
         );
 
         assert_eq!(output.storage_status(), None);
+    }
+
+    #[test]
+    fn successful_status_means_daemon_is_running() {
+        let output = DiskOutput::new(
+            "status".to_owned(),
+            "yandex-disk status".to_owned(),
+            true,
+            Some(0),
+            "Synchronization core status: idle".to_owned(),
+            String::new(),
+            false,
+        );
+
+        assert_eq!(output.daemon_status(), Some(DaemonStatus::Running));
+    }
+
+    #[test]
+    fn failed_status_means_daemon_is_stopped() {
+        let output = DiskOutput::new(
+            "status".to_owned(),
+            "yandex-disk status".to_owned(),
+            false,
+            Some(1),
+            String::new(),
+            "Error: daemon is not running".to_owned(),
+            false,
+        );
+
+        assert_eq!(output.daemon_status(), Some(DaemonStatus::Stopped));
+    }
+
+    #[test]
+    fn daemon_control_commands_report_expected_states() {
+        let started = DiskOutput::new(
+            "start".to_owned(),
+            "yandex-disk start".to_owned(),
+            true,
+            Some(0),
+            String::new(),
+            String::new(),
+            false,
+        );
+        let stopped = DiskOutput::new(
+            "stop".to_owned(),
+            "yandex-disk stop".to_owned(),
+            true,
+            Some(0),
+            String::new(),
+            String::new(),
+            false,
+        );
+        let already_running = DiskOutput::new(
+            "start".to_owned(),
+            "yandex-disk start".to_owned(),
+            false,
+            Some(1),
+            String::new(),
+            "Daemon is already running".to_owned(),
+            false,
+        );
+
+        assert_eq!(started.daemon_status(), Some(DaemonStatus::Running));
+        assert_eq!(stopped.daemon_status(), Some(DaemonStatus::Stopped));
+        assert_eq!(already_running.daemon_status(), Some(DaemonStatus::Running));
     }
 }

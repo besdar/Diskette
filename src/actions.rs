@@ -2,9 +2,10 @@ use crate::components::append_output;
 use crate::components::yandex_disk::submit_request;
 use crate::i18n::text;
 use crate::models::yandex_disk::{
-    DiskOutput, DiskRequest, SetupSave, StorageStatus, UiEvent, flatpak_persisted_sync_dir,
-    is_flatpak,
+    DaemonStatus, DiskOutput, DiskRequest, SetupSave, StorageStatus, UiEvent,
+    flatpak_persisted_sync_dir, is_flatpak,
 };
+use crate::pages::overview::DaemonActionButtons;
 use crate::utils::{display_path, open_uri_result};
 use gtk::glib;
 use gtk::prelude::*;
@@ -30,6 +31,7 @@ pub(crate) struct EventPumpUi {
     pub(crate) stack: gtk::Stack,
     pub(crate) main_navigation: gtk::StackSwitcher,
     pub(crate) refresh_button: gtk::Button,
+    pub(crate) daemon_buttons: DaemonActionButtons,
 }
 
 pub(crate) fn attach_event_pump(
@@ -82,9 +84,13 @@ pub(crate) fn attach_event_pump(
                         &output,
                     );
                     update_publish_link(&ui.publish_link_entry, &output);
+                    if let Some(daemon_status) = output.daemon_status() {
+                        ui.daemon_buttons.show_daemon_status(daemon_status);
+                    }
                     if completed_token {
                         ui.main_navigation.set_visible(true);
                         ui.refresh_button.set_visible(true);
+                        ui.daemon_buttons.show_daemon_status(DaemonStatus::Stopped);
                         ui.stack.set_visible_child_name("overview");
                     }
                 }

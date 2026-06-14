@@ -9,7 +9,7 @@ mod ui_event;
 
 pub(crate) use command_line::{shell_quote, yandex_binary};
 pub(crate) use command_options::CommandOptions;
-pub(crate) use command_output::{DiskOutput, StorageStatus};
+pub(crate) use command_output::{DaemonStatus, DiskOutput, StorageStatus};
 pub(crate) use command_progress::DiskProgress;
 pub(crate) use command_request::DiskRequest;
 pub(crate) use setup::{SetupConfig, SetupSave};
