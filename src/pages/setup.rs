@@ -160,8 +160,13 @@ pub(crate) fn build_setup_page(
     {
         let settings_box = settings_box.clone();
         settings_button.connect_clicked(move |button| {
-            settings_box.set_visible(true);
-            button.set_visible(false);
+            let visible = !settings_box.is_visible();
+            settings_box.set_visible(visible);
+            button.set_label(if visible {
+                text("hide_settings")
+            } else {
+                text("settings")
+            });
         });
     }
 
